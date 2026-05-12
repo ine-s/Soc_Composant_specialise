@@ -1,15 +1,11 @@
 # DE1 Basic Computer - V0
 
-Ce depot contient la version V0 du projet, centree sur le dossier `vhdl`.
-L'objectif est de montrer comment le composant a ete construit et integre dans le systeme Nios II.
-
-## Vue d'ensemble
 
 Le design repose sur trois blocs principaux :
 
 1. `reg16` : un registre 16 bits synchrone avec remise a zero.
 2. `reg16_avalon_interface` : une couche d'adaptation Avalon/MM qui expose le registre au systeme.
-3. `component_tutorial` : le top-level qui instancie `nios_system` et affiche une valeur 16 bits sur les afficheurs HEX.
+3. `component_tutorial.vhd` : le top-level qui instancie `nios_system` et affiche une valeur 16 bits sur les afficheurs HEX.
 
 Le fichier `hex7seg.vhd` sert de decodeur 7 segments pour afficher chaque nibble sur `HEX0` a `HEX3`.
 
@@ -17,7 +13,7 @@ Le fichier `hex7seg.vhd` sert de decodeur 7 segments pour afficher chaque nibble
 
 ### 1. Creation du registre de base
 
-Le fichier `vhdl/ip_module/reg16/reg16.vhd` implemente un registre 16 bits.
+Le fichier `ip_module/reg16/reg16.vhd` implemente un registre 16 bits.
 Il fonctionne sur front montant de l'horloge et prend en compte `byteenable` pour ecrire seulement les octets autorises.
 
 Comportement principal :
@@ -28,7 +24,7 @@ Comportement principal :
 
 ### 2. Ajout de l'interface Avalon/MM
 
-Le fichier `vhdl/ip_module/reg16/reg16_avalon_interface.vhd` encapsule `reg16` pour le rendre utilisable dans Qsys/Platform Designer.
+Le fichier `ip_module/reg16/reg16_avalon_interface.vhd` encapsule `reg16` pour le rendre utilisable dans Qsys/Platform Designer.
 
 Cette couche fait le lien entre le bus et le registre :
 
@@ -52,20 +48,20 @@ Ensuite, `hex7seg` decompose `to_HEX` en 4 digits de 4 bits :
 
 ## Fichiers importants
 
-- `vhdl/component_tutorial.vhd` : top-level de la carte DE1.
-- `vhdl/hex7seg.vhd` : decodeur pour les afficheurs 7 segments.
-- `vhdl/ip_module/reg16/reg16.vhd` : registre 16 bits de base.
-- `vhdl/ip_module/reg16/reg16_avalon_interface.vhd` : wrapper Avalon/MM du registre.
-- `vhdl/nios_system.qsys` : configuration du systeme Nios et de ses peripheriques.
+- `component_tutorial.vhd` : top-level de la carte DE1.
+- `hex7seg.vhd` : decodeur pour les afficheurs 7 segments.
+- `ip_module/reg16/reg16.vhd` : registre 16 bits de base.
+- `ip_module/reg16/reg16_avalon_interface.vhd` : wrapper Avalon/MM du registre.
+- `nios_system.qsys` : configuration du systeme Nios et de ses peripheriques.
 
 ## Lecture du montage
 
 Le chemin des donnees est le suivant :
 
-`bus Avalon/MM` -> `reg16_avalon_interface` -> `reg16` -> `Q_export` -> `nios_system` -> `component_tutorial` -> `hex7seg` -> `HEX0..HEX3`
+`bus Avalon/MM` -> `reg16_avalon_interface` -> `reg16` -> `Q_export` -> `nios_system` -> `component_tutorial.vhd` -> `hex7seg` -> `HEX0..HEX3`
 
 Autrement dit, le processeur Nios peut ecrire une valeur 16 bits dans le composant, puis cette valeur est affichee directement sur les 4 afficheurs HEX.
 
 ## Remarque
 
-Cette V0 garde uniquement la partie VHDL du projet afin de se concentrer sur l'architecture du composant et sur son integration hardware.
+Cette V0 garde uniquement la partie VHDL du projet, mais les fichiers sont presents directement a la racine pour simplifier la consultation dans GitHub.
