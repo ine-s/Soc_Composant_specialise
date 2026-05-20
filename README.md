@@ -46,31 +46,8 @@ Le design repose sur quatre couches logiques :
 4. `component_tutorial.vhd` + `hex7seg.vhd` : le top-level de la carte et l'affichage sur les HEX.
 
 ## Schema complet
+<img width="1536" height="1024" alt="schema_complet" src="https://github.com/user-attachments/assets/89cc9737-007b-449a-8133-45f6220c681e" />
 
-```mermaid
-flowchart LR
-	CPU[Nios II / logiciel] -->|lecture / ecriture Avalon-MM| BUS[Avalon-MM]
-	BUS --> IFACE[reg16_avalon_interface]
-	IFACE --> REG[reg16]
-	REG -->|Q_export 16 bits| SYS[nios_system]
-	SYS --> TOP[component_tutorial.vhd]
-	TOP --> HEX[hex7seg.vhd]
-	HEX --> H0[HEX0]
-	HEX --> H1[HEX1]
-	HEX --> H2[HEX2]
-	HEX --> H3[HEX3]
-
-	subgraph Composant_specialise
-		IFACE
-		REG
-	end
-
-	subgraph Integration_systeme
-		SYS
-		TOP
-		HEX
-	end
-```
 
 ## Comment le composant a ete cree
 
@@ -146,4 +123,3 @@ Pour qu'il soit vraiment reutilisable dans un FPGA avec processeur, il faut pens
 - au top-level qui relie le composant au reste de la carte.
 
 En pratique, le projet illustre la chaine complete: conception du coeur VHDL, encapsulation en IP core, integration dans Nios, puis validation par affichage sur les HEX.
-
