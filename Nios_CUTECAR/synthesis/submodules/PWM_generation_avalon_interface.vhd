@@ -113,9 +113,38 @@ begin
     --------------------------------------------------------------------
     -- Avalon-MM read logic
     --------------------------------------------------------------------
-    readdata <= ZERO18 & ctrl_R when address = "0" else
-                ZERO18 & ctrl_L;
+    --------------------------------------------------------------------
+    -- Avalon-MM read logic
+    --------------------------------------------------------------------
+    process(clock, resetn)
+    begin
 
+        if resetn = '0' then
+
+            readdata <= (others => '0');
+
+        elsif rising_edge(clock) then
+
+            if chipselect = '1' and read = '1' then
+
+                case address is
+
+                    when "0" =>
+                        readdata <= ZERO18 & ctrl_R;
+
+                    when "1" =>
+                        readdata <= ZERO18 & ctrl_L;
+
+                    when others =>
+                        readdata <= (others => '0');
+
+                end case;
+
+            end if;
+
+        end if;
+
+    end process;
     --------------------------------------------------------------------
     -- PWM generator instance
     --------------------------------------------------------------------
